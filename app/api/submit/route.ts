@@ -15,15 +15,19 @@ function buildResultCopy(data: WizardData, category: Category): string {
     "Heredé un piso y no sé qué hacer con él":
       "Las herencias sin resolver son uno de los casos donde el mercado puede trabajar a tu favor — si actúas en el momento adecuado.",
     "Tengo un piso alquilado y estoy harto de gestionarlo":
-      "Muchos propietarios en tu situación descubren que vender ahora les genera más liquidez que años de alquiler con las molestias incluidas.",
+      "Muchos propietarios en tu situación descubren que vender ahora les genera más liquidez que años de alquiler con todas las molestias incluidas.",
     "El piso lleva tiempo vacío y pagando gastos":
       "Cada mes que pasa es dinero que no vuelve. El mercado actual en tu zona tiene demanda real.",
+    "Estoy en proceso de separación o divorcio":
+      "Resolver el inmueble antes cierra un capítulo importante y abre caminos. Con el mercado actual hay margen para hacerlo bien y sin conflictos añadidos.",
     "Quiero cambiar de vida pero el piso me lo impide":
       "El piso no tiene por qué ser un ancla. Con la estrategia correcta, puede ser exactamente el trampolín que necesitas.",
     "Tengo capital bloqueado en ladrillo y necesito liquidez":
       "Tu propiedad puede estar generando mucho menos de lo que podría. Una valoración honesta te dará el mapa completo.",
-    "Hay un tema familiar sin resolver (herencia, separación)":
-      "Estas situaciones tienen más salida de lo que parece cuando alguien las gestiona con experiencia y sin conflictos añadidos.",
+    "Algo me dice que podría ser el momento, pero no lo tengo claro":
+      "Que estés aquí ya dice algo. Los propietarios que se informan a tiempo obtienen mejores resultados que los que esperan a estar seguros al 100%.",
+    "Solo quiero saber cuánto vale, sin compromiso":
+      "Tener este dato claro cambia la perspectiva. Muchos propietarios descubren que su propiedad vale más — o en mejor momento — de lo que pensaban.",
   };
 
   const profilePhrase =

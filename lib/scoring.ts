@@ -25,8 +25,8 @@ export function computeScore(data: Partial<WizardData>): ScoreResult {
     case "El piso lleva tiempo vacío y pagando gastos":
       score += 2;
       break;
-    case "Hay un tema familiar sin resolver (herencia, separación)":
-      score += 2;
+    case "Estoy en proceso de separación o divorcio":
+      score += 2; // alta urgencia legal/emocional, necesita resolver
       break;
     case "Quiero cambiar de vida pero el piso me lo impide":
       score += 1;
@@ -34,13 +34,19 @@ export function computeScore(data: Partial<WizardData>): ScoreResult {
     case "Tengo capital bloqueado en ladrillo y necesito liquidez":
       score += 1;
       break;
-    // "Solo quiero saber cuánto vale mi propiedad" → +0
+    case "Algo me dice que podría ser el momento, pero no lo tengo claro":
+      score += 1; // top of funnel, pero con señal de intención
+      break;
+    // "Solo quiero saber cuánto vale, sin compromiso" → +0
   }
 
   // B) Freno — cuanto más concreto y resoluble por la agencia, más puntúa
   switch (data.freno) {
     case "No sé cuánto vale realmente mi propiedad":
       score += 2; // la agencia resuelve esto de inmediato
+      break;
+    case "No sé cuánto tendría que pagar de impuestos (plusvalía, IRPF)":
+      score += 1; // miedo fiscal = muy común, la agencia puede orientar
       break;
     case "No sé si es buen momento para vender o alquilar":
       score += 1;

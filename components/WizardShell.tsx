@@ -20,14 +20,16 @@ const PROFILE_OPTIONS = [
   "Heredé un piso y no sé qué hacer con él",
   "Tengo un piso alquilado y estoy harto de gestionarlo",
   "El piso lleva tiempo vacío y pagando gastos",
+  "Estoy en proceso de separación o divorcio",
   "Quiero cambiar de vida pero el piso me lo impide",
   "Tengo capital bloqueado en ladrillo y necesito liquidez",
-  "Hay un tema familiar sin resolver (herencia, separación)",
-  "Solo quiero saber cuánto vale mi propiedad",
+  "Algo me dice que podría ser el momento, pero no lo tengo claro",
+  "Solo quiero saber cuánto vale, sin compromiso",
 ];
 
 const FRENO_OPTIONS = [
   "No sé cuánto vale realmente mi propiedad",
+  "No sé cuánto tendría que pagar de impuestos (plusvalía, IRPF)",
   "No sé si es buen momento para vender o alquilar",
   "Miedo a arrepentirme o tomar la decisión equivocada",
   "Los trámites y la burocracia me agobian",
@@ -98,6 +100,12 @@ function getContactTitle(profile: string | undefined): { title: string; subtitle
         title: "Calculamos exactamente cuánto te cuesta cada mes de espera",
         subtitle: "Es un dato que necesitas conocer para decidir con cabeza, no con emoción.",
       };
+    case "Estoy en proceso de separación o divorcio":
+      return {
+        title: "Lo gestionamos con absoluta discreción y sin añadir presión",
+        subtitle:
+          "En estos momentos lo importante es tener la información clara para poder avanzar. Nada más.",
+      };
     case "Quiero cambiar de vida pero el piso me lo impide":
       return {
         title: "Te ayudamos a dar el paso con seguridad y sin sustos",
@@ -108,10 +116,16 @@ function getContactTitle(profile: string | undefined): { title: string; subtitle
         title: "Te mostramos qué rendimiento real podrías obtener",
         subtitle: "Comparamos el coste de oportunidad de tu piso con alternativas de inversión actuales.",
       };
-    case "Hay un tema familiar sin resolver (herencia, separación)":
+    case "Algo me dice que podría ser el momento, pero no lo tengo claro":
       return {
-        title: "Lo analizamos con discreción, sin juzgar y sin complicarlo",
-        subtitle: "Estas situaciones tienen más salida de la que parece. Te la explicamos.",
+        title: "Ese pálpito suele tener base real",
+        subtitle:
+          "Te ayudamos a entender si el mercado en tu zona te da la razón — sin que tengas que decidir nada todavía.",
+      };
+    case "Solo quiero saber cuánto vale, sin compromiso":
+      return {
+        title: "Una valoración honesta, sin que nadie te llame cinco veces",
+        subtitle: "Te enviamos el informe y, si quieres más información, decides tú cuándo y cómo.",
       };
     default:
       return {
@@ -245,15 +259,17 @@ function StepContent({
         <div className="text-center py-4 animate-fade-in">
           <div className="text-5xl mb-5">🔍</div>
           <h1 className="text-2xl font-extrabold text-gray-900 leading-tight mb-3">
-            ¿Tienes una propiedad que te genera más dudas que beneficios?
+            ¿Tienes una propiedad y no sabes muy bien qué hacer con ella?
           </h1>
           <p className="text-gray-500 text-base leading-relaxed mb-5">
-            En 9 preguntas identificamos exactamente tu situación y te decimos
-            qué está pasando en tu mercado <strong>ahora mismo</strong>.
+            No hace falta tener nada decidido.<br />
+            En 9 preguntas te damos <strong>información real</strong> sobre tu
+            situación — sin presión, sin compromiso.
           </p>
           <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm text-amber-800 text-left">
-            <strong>Cada mes sin decidir tiene un coste real.</strong>{" "}
-            Este análisis te ayuda a ver si ese coste merece la pena — o no.
+            <strong>Lo que sí deberías saber:</strong>{" "}
+            cada mes sin información clara tiene un coste que se acumula.
+            Este análisis te ayuda a verlo con perspectiva.
           </div>
         </div>
       );
@@ -264,7 +280,7 @@ function StepContent({
         <div className="animate-slide-up">
           <StepHeader
             title="¿Cuál de estas situaciones describe mejor lo que te pasa?"
-            subtitle="Sé honesto — cuanto más preciso seas, mejor podremos ayudarte."
+            subtitle="No hace falta tener nada decidido. Elige la que más se acerque."
           />
           <QuestionCard
             options={PROFILE_OPTIONS}
