@@ -5,22 +5,41 @@ import { validateSubmitBody } from "@/lib/validators";
 import { computeScore } from "@/lib/scoring";
 import { getAgencyConfig, getWebhookUrl } from "@/lib/agencies";
 import { getZoneInfo } from "@/lib/zones";
-import { Category } from "@/lib/types";
+import { Category, WizardData } from "@/lib/types";
 
-function buildResultCopy(zone: string, category: Category): string {
-  const info = getZoneInfo(zone);
+function buildResultCopy(data: WizardData, category: Category): string {
+  const info = getZoneInfo(data.zone);
+
+  // Copy personalizado según la situación vital del propietario
+  const profileContext: Partial<Record<string, string>> = {
+    "Heredé un piso y no sé qué hacer con él":
+      "Las herencias sin resolver son uno de los casos donde el mercado puede trabajar a tu favor — si actúas en el momento adecuado.",
+    "Tengo un piso alquilado y estoy harto de gestionarlo":
+      "Muchos propietarios en tu situación descubren que vender ahora les genera más liquidez que años de alquiler con las molestias incluidas.",
+    "El piso lleva tiempo vacío y pagando gastos":
+      "Cada mes que pasa es dinero que no vuelve. El mercado actual en tu zona tiene demanda real.",
+    "Quiero cambiar de vida pero el piso me lo impide":
+      "El piso no tiene por qué ser un ancla. Con la estrategia correcta, puede ser exactamente el trampolín que necesitas.",
+    "Tengo capital bloqueado en ladrillo y necesito liquidez":
+      "Tu propiedad puede estar generando mucho menos de lo que podría. Una valoración honesta te dará el mapa completo.",
+    "Hay un tema familiar sin resolver (herencia, separación)":
+      "Estas situaciones tienen más salida de lo que parece cuando alguien las gestiona con experiencia y sin conflictos añadidos.",
+  };
+
+  const profilePhrase =
+    profileContext[data.profile] ??
+    "Conocer el valor real de tu propiedad es siempre el primer paso para tomar una decisión inteligente.";
 
   const categoryPhrasing: Record<Category, string> = {
-    A: `Tu perfil encaja con propietarios que habitualmente avanzan en un plazo de pocos meses. ${info.tendencia} ${info.oportunidad}`,
-    B: `Tu situación muestra interés real, aunque aún con margen de reflexión. ${info.tendencia} ${info.alerta}`,
-    C: `De momento no parece haber urgencia, pero conocer el valor de tu vivienda siempre es un punto de partida inteligente. ${info.tendencia}`,
+    A: `${profilePhrase} ${info.tendencia} ${info.oportunidad}`,
+    B: `${profilePhrase} ${info.tendencia} ${info.alerta}`,
+    C: `${profilePhrase} ${info.tendencia} Una valoración sin compromiso siempre es información útil, independientemente de cuándo decidas actuar.`,
   };
 
   return categoryPhrasing[category];
 }
 
 export async function POST(req: NextRequest) {
-  // Parse JSON body
   let body: unknown;
   try {
     body = await req.json();
@@ -31,11 +50,9 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Resolve agency from query param
   const agencyParam = req.nextUrl.searchParams.get("agency");
   const agencyConfig = getAgencyConfig(agencyParam);
 
-  // Validate inputs
   const validation = validateSubmitBody(body);
   if (!validation.valid) {
     return NextResponse.json(
@@ -45,14 +62,9 @@ export async function POST(req: NextRequest) {
   }
 
   const { data } = validation;
-
-  // Compute score + category
   const { score, category } = computeScore(data);
+  const resultCopy = buildResultCopy(data, category);
 
-  // Build result copy
-  const resultCopy = buildResultCopy(data.zone, category);
-
-  // Build full lead payload for Make
   const leadPayload = {
     ...data,
     agency_id: agencyConfig.agency_id,
@@ -62,7 +74,6 @@ export async function POST(req: NextRequest) {
     submitted_at: new Date().toISOString(),
   };
 
-  // Send to Make webhook
   const webhookUrl = getWebhookUrl(agencyConfig);
   let delivered = false;
 
@@ -72,14 +83,13 @@ export async function POST(req: NextRequest) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(leadPayload),
-        signal: AbortSignal.timeout(10_000), // 10s timeout
+        signal: AbortSignal.timeout(10_000),
       });
-
       if (webhookRes.ok) {
         delivered = true;
       } else {
         console.error(
-          `[submit] Webhook responded with HTTP ${webhookRes.status} for agency ${agencyConfig.agency_id}`
+          `[submit] Webhook HTTP ${webhookRes.status} for agency ${agencyConfig.agency_id}`
         );
       }
     } catch (err) {
@@ -87,7 +97,7 @@ export async function POST(req: NextRequest) {
     }
   } else {
     console.warn(
-      "[submit] No webhook URL configured. Set MAKE_WEBHOOK_DEFAULT (or MAKE_WEBHOOK_CORUNA01) in environment variables."
+      "[submit] No webhook URL configured. Set MAKE_WEBHOOK_DEFAULT in environment variables."
     );
   }
 

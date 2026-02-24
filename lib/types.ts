@@ -1,9 +1,10 @@
 export type WizardData = {
-  profile: string;
+  profile: string;       // situación vital del propietario
+  freno: string;         // qué le frena para actuar
   zone: string;
   propertyType: string;
   purchaseRange: string;
-  satisfaction: number;
+  satisfaction: number;  // 1-5: cuánto le pesa la situación (5 = mucho)
   intent: string;
   analysisCommitment: string;
   name: string;

@@ -16,6 +16,7 @@ export function validateSubmitBody(body: unknown): ValidationResult {
   // Required string fields
   const stringFields: Array<keyof WizardData> = [
     "profile",
+    "freno",
     "zone",
     "propertyType",
     "purchaseRange",
@@ -46,7 +47,7 @@ export function validateSubmitBody(body: unknown): ValidationResult {
   if (!Number.isFinite(sat) || sat < 1 || sat > 5) {
     return {
       valid: false,
-      error: "La satisfacción debe ser un número entre 1 y 5.",
+      error: "La valoración debe ser un número entre 1 y 5.",
     };
   }
 
@@ -62,6 +63,7 @@ export function validateSubmitBody(body: unknown): ValidationResult {
     valid: true,
     data: {
       profile: String(d.profile).trim(),
+      freno: String(d.freno).trim(),
       zone: String(d.zone).trim(),
       propertyType: String(d.propertyType).trim(),
       purchaseRange: String(d.purchaseRange).trim(),
