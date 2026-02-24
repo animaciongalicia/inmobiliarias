@@ -33,6 +33,7 @@ export type AgencyConfig = {
   agency_name: string;
   brand_color: string;
   webhook_env_key: string;
+  whatsapp?: string; // número E.164 sin espacios, ej. "+34600123456"
 };
 
 export type ZoneInfo = {

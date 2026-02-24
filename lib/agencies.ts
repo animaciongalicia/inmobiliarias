@@ -6,12 +6,14 @@ export const agencies: Record<string, AgencyConfig> = {
     agency_name: "Radar Propietario – A Coruña",
     brand_color: "#1d4ed8",
     webhook_env_key: "MAKE_WEBHOOK_DEFAULT",
+    // whatsapp: "+34600000000", // ← descomenta y pon el número real
   },
   coruna01: {
     agency_id: "coruna01",
     agency_name: "Inmobiliaria Coruña 01",
     brand_color: "#0f766e",
     webhook_env_key: "MAKE_WEBHOOK_CORUNA01",
+    // whatsapp: "+34600000001", // ← descomenta y pon el número real
   },
 };
 
